@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escalonamento Round Robin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Tela de Apresentação -->
+    <div id="presentation-screen">
+        <!-- Cabeçalho -->
+        <div class="presentation-header">
+            <div class="container">
+                <!-- Informações do cabeçalho -->
+                <div class="header-info text-white text-start mb-5 p-4 rounded-3" style="background-color: rgba(255,255,255,0.15); backdrop-filter: blur(5px);">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 border-end border-white border-2">
+                            <h2 class="mb-3"><i class="fas fa-book-open me-2"></i> Sistemas Operacionais</h2>
+                            <h4 class="mb-0"><i class="fas fa-chalkboard-teacher me-2"></i> Profª. Mariane Imbiriba</h4>
+                        </div>
+                        <div class="col-md-6 ps-4">
+                            <h3 class="mb-3"><i class="fas fa-users me-2"></i> Equipe</h3>
+                            <div class="d-flex flex-wrap gap-3">
+                                <span class="badge bg-white text-primary py-2 px-3 rounded-pill">
+                                    <i class="fas fa-user me-1"></i> Rafael Lindo
+                                </span>
+                                <span class="badge bg-white text-primary py-2 px-3 rounded-pill">
+                                    <i class="fas fa-user me-1"></i> Davi Lima
+                                </span>
+                                <span class="badge bg-white text-primary py-2 px-3 rounded-pill">
+                                    <i class="fas fa-user me-1"></i> Emanuel
+                                </span>
+                                <span class="badge bg-white text-primary py-2 px-3 rounded-pill">
+                                    <i class="fas fa-user me-1"></i> Marcus
+                                </span>
+                                <span class="badge bg-white text-primary py-2 px-3 rounded-pill">
+                                    <i class="fas fa-user me-1"></i> Bruna
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Título principal -->
+                <div class="text-center pt-3">
+                    <h1 class="display-3 fw-bold mb-4">
+                        <i class="fas fa-tasks me-3"></i> Escalonamento Round Robin
+                    </h1>
+                    <p class="lead fs-2 mb-0 opacity-90">
+                        Compreenda o algoritmo que torna os sistemas multitarefa possíveis
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <!-- O que é Round Robin -->
+            <div class="concept-card card mb-5">
+                <div class="card-header">
+                    <i class="fas fa-question-circle me-2"></i>O que é o Round Robin?
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <p class="lead">O Round Robin é um algoritmo de escalonamento de processos que organiza a execução de tarefas em sistemas operacionais.</p>
+                            <p>Principais características:</p>
+                            <ul class="fa-ul">
+                                <li><span class="fa-li"><i class="fas fa-check-circle text-primary"></i></span>Distribui o tempo da CPU igualmente entre processos</li>
+                                <li><span class="fa-li"><i class="fas fa-check-circle text-primary"></i></span>Implementa uma fila circular para garantir justiça</li>
+                                <li><span class="fa-li"><i class="fas fa-check-circle text-primary"></i></span>É especialmente eficaz em sistemas interativos</li>
+                                <li><span class="fa-li"><i class="fas fa-check-circle text-primary"></i></span>Previne que qualquer processo monopolize a CPU</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                            <img src="img/Diagrama Round Robin.jpeg" alt="Diagrama Round Robin" class="img-fluid" style="max-height: 400px;">
+                            <p class="text-muted mt-3"><small>Representação visual do algoritmo Round Robin</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conceitos Chave -->
+            <h2 class="text-center mb-4" style="color: var(--primary-color);">Conceitos Fundamentais</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="concept-card card h-100">
+                        <div class="card-header">
+                            <i class="fas fa-clock me-2"></i>Quantum
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <img src="img/quantum.jpeg" alt="Quantum" class="img-fluid" style="width: 200;">
+                            </div>
+                            <p>O <strong>quantum</strong> é a fatia de tempo que cada processo recebe para executar na CPU antes de ser interrompido.</p>
+                            <div class="alert alert-primary mt-3">
+                                <i class="fas fa-lightbulb me-2"></i>
+                                <strong>Exemplo:</strong> Com quantum de 4ms, cada processo executa por até 4ms antes de ceder a CPU.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="concept-card card h-100">
+                        <div class="card-header">
+                            <i class="fas fa-redo me-2"></i>Fila Circular
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <img src="img/fila-circular.jpeg" alt="Fila Circular" class="img-fluid" style="width: 200;">
+                            </div>
+                            <p>Processos são organizados em uma <strong>fila FIFO</strong> (First In, First Out).</p>
+                            <p>Quando interrompidos (após o quantum), retornam ao final da fila para nova execução.</p>
+                            <div class="mt-3">
+                                <i class="fas fa-random text-primary me-2"></i>
+                                <small>Garante que todos tenham oportunidades iguais</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="concept-card card h-100">
+                        <div class="card-header">
+                            <i class="fas fa-balance-scale me-2"></i>Ciclo Justo
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-4">
+                                <img src="img/ciclo-justo.jpeg" alt="Ciclo Justo" class="img-fluid" style="width: 200;">
+                            </div>
+                            <p><strong>Fairness</strong> é o princípio fundamental:</p>
+                            <ul class="fa-ul">
+                                <li><span class="fa-li"><i class="fas fa-equals text-primary"></i></span>Todos processos recebem tempo igual</li>
+                                <li><span class="fa-li"><i class="fas fa-ban text-danger"></i></span>Nenhum monopoliza a CPU</li>
+                                <li><span class="fa-li"><i class="fas fa-user-clock text-info"></i></span>Evita inanição (starvation)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Como Funciona -->
+            <div class="concept-card card my-5">
+                <div class="card-header">
+                    <i class="fas fa-cogs me-2"></i>Funcionamento do Algoritmo
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div>
+                                    <h4>Fila Circular FIFO</h4>
+                                    <p>Processos chegam e são organizados em fila por ordem de chegada. O escalonador sempre pega o primeiro da fila para executar.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div>
+                                    <h4>Execução por Quantum</h4>
+                                    <p>Cada processo recebe um tempo fixo (quantum) na CPU. Se completar antes, libera a CPU voluntariamente.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div>
+                                    <h4>Reinserção na Fila</h4>
+                                    <p>Processos não concluídos após o quantum são interrompidos e recolocados no final da fila para nova chance.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="step-item">
+                                <div class="step-number">4</div>
+                                <div>
+                                    <h4>Término do Processo</h4>
+                                    <p>Quando um processo finaliza, é removido definitivamente da fila de escalonamento.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                            <img src="img/como-funciona-os-processos.jpeg" alt="Fluxo Round Robin" class="img-fluid" style="max-height: 500px;">
+                            <p class="text-muted mt-3"><small>Fluxograma detalhado do algoritmo Round Robin</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Exemplo Prático -->
+            <div class="concept-card card my-5">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-laptop-code me-2"></i>Exemplo Prático Interativo
+                </div>
+                <div class="card-body">
+                    <h4 class="mb-4">Simulação com quantum = 4 unidades</h4>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="alert alert-secondary">
+                                <h5><i class="fas fa-microchip me-2"></i>Processos</h5>
+                                <ul class="mb-0">
+                                    <li><strong>P1:</strong> 10 unidades</li>
+                                    <li><strong>P2:</strong> 4 unidades</li>
+                                    <li><strong>P3:</strong> 6 unidades</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="alert alert-light">
+                                <h5><i class="fas fa-info-circle me-2"></i>Como funciona?</h5>
+                                <p class="mb-0">Cada processo executa por até 4 unidades de tempo antes de ceder a CPU para o próximo.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Ciclos de Execução:</h5>
+                    <div class="row text-center g-4">
+                        <div class="col-md-4">
+                            <div class="example-process process-running">P1</div>
+                            <div class="alert alert-light mt-2">
+                                <i class="fas fa-play-circle me-2 text-primary"></i>
+                                <strong>Executa 4</strong><br>
+                                Resta 6
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="example-process process-running">P2</div>
+                            <div class="alert alert-light mt-2">
+                                <i class="fas fa-check-circle me-2 text-success"></i>
+                                <strong>Executa 4</strong><br>
+                                Termina
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="example-process process-running">P3</div>
+                            <div class="alert alert-light mt-2">
+                                <i class="fas fa-play-circle me-2 text-primary"></i>
+                                <strong>Executa 4</strong><br>
+                                Resta 2
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="example-process process-running">P1</div>
+                            <div class="alert alert-light mt-2">
+                                <i class="fas fa-play-circle me-2 text-primary"></i>
+                                <strong>Executa 4</strong><br>
+                                Resta 2
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="example-process process-running">P3</div>
+                            <div class="alert alert-light mt-2">
+                                <i class="fas fa-check-circle me-2 text-success"></i>
+                                <strong>Executa 2</strong><br>
+                                Termina
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="example-process process-running">P1</div>
+                            <div class="alert alert-light mt-2">
+                                <i class="fas fa-check-circle me-2 text-success"></i>
+                                <strong>Executa 2</strong><br>
+                                Termina
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success mt-4">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-check-circle fa-2x me-3"></i>
+                            <div>
+                                <h5 class="mb-1">Resultado Final</h5>
+                                <p class="mb-0">Todos os processos foram concluídos de forma justa e eficiente!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vantagens e Desvantagens -->
+            <h2 class="text-center mb-4" style="color: var(--primary-color);">Análise Comparativa</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="concept-card card h-100 border-success">
+                        <div class="card-header bg-success text-white">
+                            <i class="fas fa-thumbs-up me-2"></i>Vantagens
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex mb-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-code"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4>Implementação Simples</h4>
+                                    <p>Algoritmo direto de programar, com baixa complexidade computacional.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-gavel"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4>Justiça Garantida</h4>
+                                    <p>Todos os processos têm acesso equitativo aos recursos da CPU.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-4">
+                                <div class="feature-icon">
+                                    <i class="fas fa-user-clock"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4>Sem Inanição</h4>
+                                    <p>Nenhum processo fica indefinidamente esperando por tempo de CPU.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex">
+                                <div class="feature-icon">
+                                    <i class="fas fa-desktop"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4>Resposta Rápida</h4>
+                                    <p>Ideal para sistemas interativos com múltiplos usuários.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="concept-card card h-100 border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <i class="fas fa-thumbs-down me-2"></i>Desvantagens
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex mb-4">
+                                <div class="feature-icon text-danger">
+                                    <i class="fas fa-ruler"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4>Sensibilidade ao Quantum</h4>
+                                    <p>Desempenho varia significativamente com o tamanho do quantum.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-4">
+                                <div class="feature-icon text-danger">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4>Trocas de Contexto</h4>
+                                    <p>Muitas interrupções podem consumir tempo útil da CPU.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-4">
+                                <div class="feature-icon text-danger">
+                                    <i class="fas fa-hourglass-end"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4>Turnaround Ampliado</h4>
+                                    <p>Processos longos podem demorar mais para concluir.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex">
+                                <div class="feature-icon text-danger">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h4>Eficiência Variável</h4>
+                                    <p>Pode não ser ideal para todos os tipos de carga de trabalho.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Aplicações -->
+            <div class="concept-card card my-5">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-mobile-alt me-2"></i>Aplicações Práticas
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4 text-center">
+                            <div class="p-4 bg-light rounded-3 h-100">
+                                <i class="fas fa-desktop fa-4x mb-4" style="color: var(--primary-color);"></i>
+                                <h4>Sistemas Operacionais</h4>
+                                <p>Linux, Windows e macOS usam variações do Round Robin para tarefas interativas.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Quantum: 10-100ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 text-center">
+                            <div class="p-4 bg-light rounded-3 h-100">
+                                <i class="fas fa-mobile-alt fa-4x mb-4" style="color: var(--primary-color);"></i>
+                                <h4>Dispositivos Móveis</h4>
+                                <p>Android e iOS utilizam para gerenciar aplicativos em segundo plano.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Quantum: 5-50ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 text-center">
+                            <div class="p-4 bg-light rounded-3 h-100">
+                                <i class="fas fa-microchip fa-4x mb-4" style="color: var(--primary-color);"></i>
+                                <h4>Sistemas Embarcados</h4>
+                                <p>Equipamentos com múltiplas tarefas simultâneas.</p>
+                                <div class="mt-3">
+                                    <span class="badge bg-primary">Quantum: 1-10ms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive mt-5">
+                        <table class="table comparison-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 30%;">Sistema</th>
+                                    <th style="width: 40%;">Implementação</th>
+                                    <th style="width: 30%;">Quantum Típico</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Linux (Desktop)</td>
+                                    <td>Tarefas interativas e tempo compartilhado</td>
+                                    <td>10-100ms</td>
+                                </tr>
+                                <tr>
+                                    <td>Windows 10/11</td>
+                                    <td>Processos em primeiro plano</td>
+                                    <td>20-120ms</td>
+                                </tr>
+                                <tr>
+                                    <td>Android</td>
+                                    <td>Gerenciamento de aplicativos</td>
+                                    <td>5-50ms</td>
+                                </tr>
+                                <tr>
+                                    <td>macOS</td>
+                                    <td>Tarefas do usuário</td>
+                                    <td>10-80ms</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conclusão -->
+            <div class="concept-card card my-5">
+                <div class="card-header bg-gradient-primary text-white">
+                    <i class="fas fa-graduation-cap me-2"></i>Conclusão e Recomendações
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h3 class="mb-4">Resumo dos Principais Pontos</h3>
+                            <div class="alert alert-primary">
+                                <i class="fas fa-star me-2"></i>
+                                <strong>Round Robin é ideal para:</strong> Sistemas multiusuário, tempo compartilhado e aplicações interativas
+                            </div>
+                            
+                            <ul class="fa-ul">
+                                <li class="mb-3"><span class="fa-li"><i class="fas fa-check-circle text-primary"></i></span><strong>Balanceamento:</strong> Equilibra justiça e eficiência no uso da CPU</li>
+                                <li class="mb-3"><span class="fa-li"><i class="fas fa-check-circle text-primary"></i></span><strong>Configuração:</strong> Escolha do quantum é crucial para desempenho</li>
+                                <li class="mb-3"><span class="fa-li"><i class="fas fa-check-circle text-primary"></i></span><strong>Flexibilidade:</strong> Pode ser combinado com outros algoritmos para casos específicos</li>
+                                <li><span class="fa-li"><i class="fas fa-check-circle text-primary"></i></span><strong>Evolução:</strong> Variações modernas melhoram o modelo básico</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 text-center mt-4 mt-lg-0">
+                            <img src="img/principais-pontos.jpeg" alt="Conclusão" class="img-fluid">
+                            <p class="text-muted mt-3"><small>Representação gráfica do escalonamento</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Referências -->
+            <div class="card mb-5">
+                <div class="card-header bg-dark text-white">
+                    <i class="fas fa-book me-2"></i>Referências Bibliográficas
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-book-open fa-lg mt-1 me-3" style="color: var(--primary-color);"></i>
+                                <div>
+                                    <strong>Round Robin</strong> https://deinfo.uepg.br/~alunoso/2016/ROUNDROBIN/
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Botão para o Simulador -->
+            <div class="text-center my-5 py-4">
+                <h3 class="mb-4">Pronto para experimentar?</h3>
+                <p class="lead mb-4">Acesse nosso simulador interativo para vivenciar o Round Robin na prática!</p>
+                <button id="go-to-simulator" class="btn-simulator">
+                    <i class="fas fa-play-circle me-2"></i>Acessar Simulador
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tela do Simulador (inicialmente oculta) -->
+    <div id="simulator-screen" class="hidden">
+        <div class="container">
+            <button id="back-to-presentation" class="back-button">
+                <i class="fas fa-arrow-left me-2"></i>Voltar para a Explicação
+            </button>
+            
+            <div class="simulator-container">
+                <h2 class="text-center mb-4" style="color: var(--primary-color);"><i class="fas fa-tasks me-2"></i>Simulador Round Robin</h2>
+                
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="alert alert-info">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-info-circle fa-2x me-3"></i>
+                                <div>
+                                    <h4 class="mb-1">Como usar o simulador</h4>
+                                    <p class="mb-0">Adicione processos, configure o quantum e observe como o escalonador distribui o tempo da CPU!</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                       
+                        
+                        <!-- Área do Simulador -->
+                        <div class="row mt-4 g-4">
+                            <div class="col-lg-5">
+                                <div class="card h-100">
+                                    <div class="card-header bg-primary text-white">
+                                        <i class="fas fa-cog me-2"></i>Configuração
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="simulator-form">
+                                            <div class="mb-3">
+                                                <label for="quantum" class="form-label">
+                                                    <i class="fas fa-clock me-2"></i>Quantum (unidades de tempo)
+                                                </label>
+                                                <input type="number" class="form-control form-control-lg" id="quantum" min="1" value="4" required>
+                                            </div>
+                                            
+                                            <hr>
+                                            
+                                            <h5><i class="fas fa-plus-circle me-2"></i>Adicionar Processo</h5>
+                                            
+                                            <div class="mb-3">
+                                                <label for="process-name" class="form-label">
+                                                    <i class="fas fa-tag me-2"></i>Nome do Processo
+                                                </label>
+                                                <input type="text" class="form-control form-control-lg" id="process-name" placeholder="P1" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="burst-time" class="form-label">
+                                                    <i class="fas fa-stopwatch me-2"></i>Tempo de Execução
+                                                </label>
+                                                <input type="number" class="form-control form-control-lg" id="burst-time" min="1" value="5" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="arrival-time" class="form-label">
+                                                    <i class="fas fa-sign-in-alt me-2"></i>Tempo de Chegada
+                                                </label>
+                                                <input type="number" class="form-control form-control-lg" id="arrival-time" min="0" value="0">
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                                <i class="fas fa-plus me-2"></i>Adicionar Processo
+                                            </button>
+                                        </form>
+                                        
+                                        <hr>
+                                        
+                                        <div class="d-grid gap-2">
+                                            <button id="start-simulation" class="btn btn-success btn-lg">
+                                                <i class="fas fa-play me-2"></i>Iniciar Simulação
+                                            </button>
+                                            <button id="reset-simulation" class="btn btn-outline-danger">
+                                                <i class="fas fa-undo me-2"></i>Reiniciar Tudo
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-7">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                        <span><i class="fas fa-list me-2"></i>Processos Cadastrados</span>
+                                        <span class="badge bg-light text-dark rounded-pill" id="process-count">0 processos</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Processo</th>
+                                                        <th>Chegada</th>
+                                                        <th>Execução</th>
+                                                        <th>Restante</th>
+                                                        <th>Status</th>
+                                                        <th>Ações</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="process-table">
+                                                    <!-- Processos serão inseridos aqui -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <i class="fas fa-chart-line me-2"></i>Linha do Tempo
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Legenda de status -->
+                                        <div class="status-legend">
+                                            <div class="status-item">
+                                                <div class="status-color" style="background-color: var(--primary-color);"></div>
+                                                <span>Tarefa Nova</span>
+                                            </div>
+                                            <div class="status-item">
+                                                <div class="status-color" style="background-color: var(--danger-color);"></div>
+                                                <span>Tarefa em Execução</span>
+                                            </div>
+                                            <div class="status-item">
+                                                <div class="status-color" style="background-color: #6c757d;"></div>
+                                                <span>Tarefa em Espera</span>
+                                            </div>
+                                            <div class="status-item">
+                                                <div class="status-color" style="background-color: var(--success-color);"></div>
+                                                <span>Tarefa Concluída</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="timeline-container" class="text-center py-4">
+                                            <i class="fas fa-film fa-3x text-muted mb-3"></i>
+                                            <h5 class="text-muted">Simulação não iniciada</h5>
+                                            <p class="text-muted">Adicione processos e clique em "Iniciar Simulação"</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Estatísticas -->
+                        <div class="row mt-4 g-4">
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-hourglass-half fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                        <h4>Tempo Médio de Espera</h4>
+                                        <h2 id="avg-waiting-time" class="text-primary">0</h2>
+                                        <p class="text-muted">unidades de tempo</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-history fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                        <h4>Tempo Médio de Retorno</h4>
+                                        <h2 id="avg-turnaround-time" class="text-primary">0</h2>
+                                        <p class="text-muted">unidades de tempo</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-clock fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                        <h4>Tempo Total</h4>
+                                        <h2 id="total-time" class="text-primary">0</h2>
+                                        <p class="text-muted">unidades de tempo</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bootstrap Bundle com Popper -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="js/scripts.js"></script>
+            </body>
+            </html>
